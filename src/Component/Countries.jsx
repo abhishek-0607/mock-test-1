@@ -7,12 +7,15 @@ function Countries() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [totalPages, setTotalPages] = useState(null);
-  const [page, setPage] = useState(1);
+  const [current, setCurrent] = useState(1);
+  const onChange = (value) => {
+    setCurrent(current + value);
+  };
   useEffect(() => {
     setIsLoading(true);
 
     fetch(
-      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-countries?page=${page}&limit=10&sort=population&order=asc`
+      `https://dbioz2ek0e.execute-api.ap-south-1.amazonaws.com/mockapi/get-countries?page=${current}&limit=10`
     )
       .then((res) => res.json())
       .then((res) => {
@@ -21,7 +24,7 @@ function Countries() {
         setTotalPages(res.totalPages);
         setIsLoading(false);
       });
-  }, [page]);
+  }, [current]);
 
   if (isLoading) return <LoadingIndicator />;
 
@@ -31,12 +34,16 @@ function Countries() {
       <div data-testid="countries-container">
         {/* Countries Card */}
         {data.map((item, index) => (
-          <CountriesCard item={item} key={index} />
+          <CountriesCard
+            country={item.country}
+            population={item.population}
+            key={index}
+          />
         ))}
       </div>
       <div>
         {/* Pagination */}
-        <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+        <Pagination current={current} onChange={onChange} total={totalPages} />
       </div>
     </div>
   );

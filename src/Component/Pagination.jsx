@@ -1,19 +1,19 @@
-function Pagination({ page, setPage, totalPages }) {
+function Pagination({ current, onChange, total }) {
   const prev = (
     <button
       data-testid="prev-page"
-      disabled={page === 1}
-      onClick={() => setPage(page - 1)}
+      disabled={current === 1}
+      onClick={() => onChange(-1)}
     >
       Prev
     </button>
   );
-  const currentPage = <button data-testid="current-page">{page}</button>;
+  const currentPage = <button data-testid="current-page">{current}</button>;
   const next = (
     <button
       data-testid="next-page"
-      disabled={page === totalPages}
-      onClick={() => setPage(page + 1)}
+      disabled={current === total}
+      onClick={() => onChange(1)}
     >
       Next
     </button>
@@ -26,7 +26,7 @@ function Pagination({ page, setPage, totalPages }) {
         {next}
       </div>
       <div>
-        Total Pages: <b data-testid="total-pages">{totalPages}</b>
+        Total Pages: <b data-testid="total-pages">{total}</b>
       </div>
     </div>
   );
